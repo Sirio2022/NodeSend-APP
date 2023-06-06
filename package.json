@@ -1,0 +1,20 @@
+{
+  "name": "nodesend---servidor",
+  "version": "1.0.0",
+  "description": "Proyecto NodeSend por Juan Manuel Alvarez",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js"
+  },
+  "author": "Juan Manuel Alvarez",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
