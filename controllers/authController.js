@@ -5,11 +5,11 @@ require('dotenv').config({ path: '.env' });
 const { validationResult } = require('express-validator');
 
 exports.autenticarUsuario = async (req, res, next) => {
-   // Mostrar mensajes de error de express validator
-   const errores = validationResult(req);
-   if (!errores.isEmpty()) {
-       return res.status(400).json({ errores: errores.array() })
-   }
+  // Mostrar mensajes de error de express validator
+  const errores = validationResult(req);
+  if (!errores.isEmpty()) {
+    return res.status(400).json({ errores: errores.array() });
+  }
 
   // Buscar el usuario para ver si esta registrado
   const { email, password } = req.body;
@@ -41,4 +41,6 @@ exports.autenticarUsuario = async (req, res, next) => {
   }
 };
 
-exports.usuarioAutenticado = async (req, res, next) => {};
+exports.usuarioAutenticado = async (req, res, next) => {
+  res.status(200).json({ usuario: req.usuario });
+};

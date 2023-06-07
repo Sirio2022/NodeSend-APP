@@ -1,8 +1,11 @@
 const express = require('express');
 const conectarDB = require('./config/db');
 
+
 // Create a new express application instance
 const app = express();
+
+
 
 // Conectar a la base de datos
 conectarDB();
