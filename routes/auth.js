@@ -8,17 +8,15 @@ const { check } = require('express-validator');
 
 // Autenticar un usuario
 
-
-
-
 router.post(
-    '/',
-    authController.autenticarUsuario
+  '/',
+  [
+    check('email', 'Agrega un email válido').isEmail(),
+    check('password', 'El password es obligatorio').not().isEmpty(),
+  ],
+  authController.autenticarUsuario
 );
 
-router.get(
-    '/',
-    authController.usuarioAutenticado
-);
+router.get('/', authController.usuarioAutenticado);
 
 module.exports = router;
