@@ -6,9 +6,9 @@ const bcrypt = require('bcrypt');
 exports.nuevoEnlace = async (req, res, next) => {
   // Revisar si hay errores
   const errores = validationResult(req);
-    if (!errores.isEmpty()) {
-        return res.status(400).json({ errores: errores.array() })
-    }
+  if (!errores.isEmpty()) {
+    return res.status(400).json({ errores: errores.array() });
+  }
 
   // Almacenar el enlace en la base de datos
   const { nombre_original } = req.body;
@@ -45,5 +45,33 @@ exports.nuevoEnlace = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log(error);
+  }
+};
+
+// Obtener enlace
+exports.obtenerEnlace = async (req, res, next) => {
+  // Verificar si existe el enlace
+  const { url } = req.params;
+  const enlace = await Enlaces.findOne({ url });
+  if (!enlace) {
+    res.status(404).json({ msg: 'Ese enlace no existe' });
+    return next();
+  }
+
+  // Si el enlace existe
+  res.status(200).json({ archivo: enlace.nombre });
+
+  // Si las descargas son iguales a 1 - Borrar la entrada y borrar el archivo
+  const { descargas, nombre } = enlace;
+  if (descargas === 1) {
+    // Eliminar el archivo
+    req.archivo = nombre;
+    // Eliminar la entrada de la base de datos
+    await Enlaces.findOneAndRemove(req.params.url);
+    next();
+  } else {
+    // Si las descargas son mayores a 1 - Restar 1 a las descargas
+    enlace.descargas--;
+    await enlace.save();
   }
 };
