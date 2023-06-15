@@ -4,7 +4,7 @@ const fs = require('fs');
 
 exports.subirArchivo = async (req, res, next) => {
   const configuracionMulter = {
-    limits: { fileSize: req.usuario ? 1000000000 : 10000000 },
+    limits: { fileSize: req.usuario ? 1000000000 : 20000000 },
     storage: (fileStorage = multer.diskStorage({
       destination: (req, file, cb) => {
         cb(null, __dirname + '/../uploads/');
