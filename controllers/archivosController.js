@@ -4,7 +4,7 @@ const fs = require('fs');
 
 exports.subirArchivo = async (req, res, next) => {
   const configuracionMulter = {
-    limits: { fileSize: req.usuario ? 100000000 : 2000000 },
+    limits: { fileSize: req.usuario ? 1000000000 : 10000000 },
     storage: (fileStorage = multer.diskStorage({
       destination: (req, file, cb) => {
         cb(null, __dirname + '/../uploads/');
@@ -32,7 +32,6 @@ exports.subirArchivo = async (req, res, next) => {
 };
 
 exports.eliminarArchivo = async (req, res, next) => {
-  
   try {
     fs.unlinkSync(__dirname + `/../uploads/${req.archivo}`);
     console.log('Archivo eliminado');
