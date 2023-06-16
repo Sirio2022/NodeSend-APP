@@ -10,13 +10,15 @@ exports.nuevoEnlace = async (req, res, next) => {
     return res.status(400).json({ errores: errores.array() });
   }
 
+  //console.log(req.body);
+
   // Almacenar el enlace en la base de datos
-  const { nombre_original } = req.body;
+  const { nombre_original, nombre } = req.body;
 
   // Crear un objeto de enlace
   const enlace = new Enlaces();
   enlace.url = shortid.generate();
-  enlace.nombre = shortid.generate();
+  enlace.nombre = nombre;
   enlace.nombre_original = nombre_original;
 
   // Si el usuario esta autenticado
