@@ -55,7 +55,6 @@ exports.todosEnlaces = async (req, res) => {
   try {
     const enlaces = await Enlaces.find({}).select('url -_id');
     res.json({ enlaces });
-    
   } catch (error) {
     console.log(error);
   }
@@ -74,8 +73,7 @@ exports.obtenerEnlace = async (req, res, next) => {
   // Si el enlace existe
   res.status(200).json({ archivo: enlace.nombre });
 
-  return
-
+  return;
 
   // Si las descargas son iguales a 1 - Borrar la entrada y borrar el archivo
   const { descargas, nombre } = enlace;
