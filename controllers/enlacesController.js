@@ -60,6 +60,39 @@ exports.todosEnlaces = async (req, res) => {
   }
 };
 
+// Retorna si el enlace tiene password o no
+exports.tienePassword = async (req, res, next) => {
+  // Verificar si existe el enlace
+  const { url } = req.params;
+  const enlace = await Enlaces.findOne({ url });
+  if (!enlace) {
+    res.status(404).json({ msg: 'Ese enlace no existe' });
+    return next();
+  }
+
+  if (enlace.password) {
+    return res.json({ password: true, enlace: enlace.url });
+  }
+  next();
+};
+
+// Verifica si el password es correcto
+exports.verificarPassword = async (req, res, next) => {
+  const { url } = req.params;
+  const { password } = req.body;
+
+  // Consultar por el enlace
+  const enlace = await Enlaces.findOne({ url });
+
+  // Verificar el password
+  if (bcrypt.compareSync(password, enlace.password)) {
+    // Permitir descargar el archivo
+    next()
+  } else {
+    return res.status(401).json({ msg: 'Password Incorrecto' });
+  }
+};
+
 // Obtener enlace
 exports.obtenerEnlace = async (req, res, next) => {
   // Verificar si existe el enlace
@@ -71,21 +104,7 @@ exports.obtenerEnlace = async (req, res, next) => {
   }
 
   // Si el enlace existe
-  res.status(200).json({ archivo: enlace.nombre });
+  res.status(200).json({ archivo: enlace.nombre, password: false });
 
-  return;
-
-  // Si las descargas son iguales a 1 - Borrar la entrada y borrar el archivo
-  const { descargas, nombre } = enlace;
-  if (descargas === 1) {
-    // Eliminar el archivo
-    req.archivo = nombre;
-    // Eliminar la entrada de la base de datos
-    await Enlaces.findOneAndRemove(req.params.url);
-    next();
-  } else {
-    // Si las descargas son mayores a 1 - Restar 1 a las descargas
-    enlace.descargas--;
-    await enlace.save();
-  }
+  next();
 };
